@@ -1,18 +1,37 @@
+const CACHE_NAME = "gih-cache";
+const CACHED_URLS = [
+  "/index-offline.html",
+  "https://maxcdn.bootstrapcnd.com/bootstrap/3.3.6/css/bootstrap.min.css",
+  "/css/gih-offline.css",
+  "/img/jumbo-background-sm.jpg",
+  "/img/logo-header.png",
+];
+
 self.addEventListener("install", function (event) {
   event.waitUntil(
-    caches.open("gih-cache").then(function (cache) {
-      return cache.add("/index-offline.html");
+    caches.open(CACHE_NAME).then(function (cache) {
+      return cache.addAll(CACHED_URLS);
     })
   );
 });
 
-self.addEventListener("fetch", function (event) {
-  event.respondWith(
-    caches.match(event.request).catch(function () {
-      return caches.match("/index-offline.html");
-    })
-  );
-});
+// self.addEventListener("install", function (event) {
+//   event.waitUntil(
+//     // service worker install 이벤트는 캐시에 저장이 끝난 후 발생.
+//     // 캐시 저장이 실패하거나 어떤 오류가 난다면 service worker를 install하지 않음.
+//     caches.open("gih-cache").then(function (cache) {
+//       return cache.add("/index-offline.html");
+//     })
+//   );
+// });
+
+// self.addEventListener("fetch", function (event) {
+//   event.respondWith(
+//     caches.match(event.request).catch(function () {
+//       return caches.match("/index-offline.html");
+//     })
+//   );
+// });
 
 // self.addEventListener("fetch", function (event) {
 //   if (event.request.url.includes("bootstrap.min.css")) {
