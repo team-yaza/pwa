@@ -1,9 +1,23 @@
+const CACHE_NAME = "gih-cache";
+
 self.addEventListener("install", function () {
   console.log("install");
 });
 
-self.addEventListener("activate", function () {
+self.addEventListener("activate", function (event) {
   console.log("activate");
+
+  event.waitUntil(
+    caches.keys().then(function (cacheNames) {
+      return Promise.all(
+        cacheNames.map(function (cacheName) {
+          if (CACHE_NAME !== cacheName && cacheName.startsWith("gih-cache")) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
 });
 
 self.addEventListener("fetch", function (event) {
