@@ -15,6 +15,18 @@ self.addEventListener("install", function (event) {
   );
 });
 
+self.addEventListener("fetch", function (event) {
+  event.respondWith(
+    fetch(event.request).catch(function (response) {
+      if (response) {
+        return response;
+      } else if (event.request.headers.get("accept").includes("text/html")) {
+        return caches.match("/index-offline.html");
+      }
+    })
+  );
+});
+
 // self.addEventListener("install", function (event) {
 //   event.waitUntil(
 //     // service worker install 이벤트는 캐시에 저장이 끝난 후 발생.
